@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Master - 完全版</title>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #4a6fa5;
+            --primary-hover: #3b5984;
+            --accent-color: #2c3e50;
+            --correct-color: #d9534f; /* Softer Red for Correct Answers */
+            --correct-bg: #fdf2f2;
+            --incorrect-color: #c9302c;
+            --text-main: #2d3748;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 12px -2px rgba(74, 111, 165, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Sans", "Meiryo", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4a6fa5, #6b8cce);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(74, 111, 165, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.92;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background-color: #ffffff;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 12px 24px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 111, 165, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .mode-nav {
+            display: flex;
+            justify-content: center;
+            background: #e2e8f0;
+            padding: 6px;
+            border-radius: 50px;
+            width: fit-content;
+            margin: 0 auto 2rem auto;
+        }
+
+        .mode-btn {
+            border: none;
+            background: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .section-content { display: none; }
+        .section-content.active { display: block; }
+
+        .problem-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-bottom: 1.75rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-num { font-weight: 800; color: var(--primary-color); font-size: 1.15rem; }
+        .source-tag { font-size: 0.85rem; font-weight: 600; background-color: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; }
+        .question-text { font-size: 1.15rem; margin-bottom: 1.25rem; font-weight: 600; line-height: 1.7; }
+
+        .answer-box {
+            background-color: var(--correct-bg);
+            border-left: 6px solid var(--correct-color);
+            padding: 12px 18px;
+            margin: 1rem 0 1.25rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .answer-label { font-weight: 800; color: var(--correct-color); font-size: 1.15rem; }
+        
+        .explanation {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.25rem;
+            border: 1px solid #e2e8f0;
+        }
+        .lang-section { margin-bottom: 1rem; }
+        .lang-section:last-child { margin-bottom: 0; }
+        .lang-title { font-size: 0.85rem; font-weight: 800; color: var(--primary-color); text-transform: uppercase; margin-bottom: 4px; }
+
+        .quiz-select, .quiz-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.05rem;
+            margin: 0.5rem 0 1rem 0;
+            background-color: #fff;
+            color: var(--text-main);
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .quiz-select:focus, .quiz-input:focus { border-color: var(--primary-color); outline: none; }
+        
+        .quiz-controls { text-align: center; margin: 2.5rem 0; }
+        .btn-submit { background-color: #2b9348; color: white; border: none; padding: 14px 36px; font-size: 1.15rem; font-weight: 700; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 12px rgba(43, 147, 72, 0.25); transition: all 0.2s; }
+        .btn-submit:hover { background-color: #23783b; transform: translateY(-1px); }
+        .btn-retry { background-color: #d97706; color: white; border: none; padding: 14px 36px; font-size: 1.15rem; font-weight: 700; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25); margin-left: 12px; transition: all 0.2s; }
+        .btn-retry:hover { background-color: #b45309; transform: translateY(-1px); }
+
+        .score-banner {
+            display: none;
+            background: linear-gradient(135deg, #4a6fa5, #5b86e5);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 16px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        .quiz-result { margin-top: 12px; font-weight: 700; padding: 10px 14px; border-radius: 8px; font-size: 1.05rem; }
+        .quiz-result.correct { background-color: #e6f4ea; color: #1e7e34; border: 1px solid #c3e6cb; }
+        .quiz-result.incorrect { background-color: #fdf2f2; color: var(--correct-color); border: 1px solid #f8d7da; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>English Grammar Master</h1>
+    <p>仮定法・不定詞・動名詞 全問題完全収録版 (All 99 Problems)</p>
+</header>
+
+<div class="container">
+    <!-- Category & Mode Navigation -->
+    <div class="category-nav">
+        <button class="category-btn active" onclick="switchCategory('subjunctive')">1. 仮定法 (Subjunctive - 34問)</button>
+        <button class="category-btn" onclick="switchCategory('infinitive')">2. 不定詞 (Infinitive - 41問)</button>
+        <button class="category-btn" onclick="switchCategory('gerund')">3. 動名詞 (Gerund - 24問)</button>
+    </div>
+
+    <div class="mode-nav">
+        <button class="mode-btn active" onclick="switchMode('study')">Study Mode (学習・解説)</button>
+        <button class="mode-btn" onclick="switchMode('quiz')">Quiz Mode (テスト演習)</button>
+    </div>
+
+    <div id="scoreBanner" class="score-banner"></div>
+
+    <!-- Dynamic Section Containers -->
+    <div id="subjunctive-section" class="section-content active"></div>
+    <div id="infinitive-section" class="section-content"></div>
+    <div id="gerund-section" class="section-content"></div>
+
+    <div id="quizControls" class="quiz-controls" style="display:none;">
+        <button class="btn-submit" onclick="gradeQuiz()">答え合わせ (Submit)</button>
+        <button class="btn-retry" onclick="resetQuiz()">もう一度 (Re-try)</button>
+    </div>
+</div>
+
+<script>
+    const db = {
+        subjunctive: [
+            { id: 1, num: 80, src: "獨協大", q: "If I ( ) the truth, I would tell you.", opts: ["know", "knew", "will know", "have known"], ans: 2, type: "mcq", jp: "現在の事実に反する仮定を表す「仮定法過去」。If節内の動詞は過去形になります。", en: "Subjunctive Past for unreal present situations requires the past tense 'knew'." },
+            { id: 2, num: 81, src: "東海大", q: "If there weren't so many mosquitoes, it ( ) a perfect evening.", opts: ["can be", "will be", "is", "would be"], ans: 4, type: "mcq", jp: "If節が仮定法過去なので、帰結節は「助動詞の過去形＋動詞原形」です。", en: "Matches the past subjunctive 'weren't' with 'would + base verb'." },
+            { id: 3, num: 82, src: "東海大", q: "If Japanese were an international language, people all over the world [are] eager to study it. (誤りを正しなさい)", ans: "would be", type: "text", jp: "仮定法過去の主節は助動詞の過去形が必要です。are を would be に直します。", en: "The main clause needs a past modal. Change 'are' to 'would be'." },
+            { id: 4, num: 83, src: "東北医科薬科大", q: "He might have succeeded in business if he ( ) good companions when young.", opts: ["had", "had had", "have", "would have"], ans: 2, type: "mcq", jp: "過去の事実に反する仮定法過去完了。If節は had + 過去分詞 (had had) です。", en: "Subjunctive Past Perfect for past unreal conditions requires 'had + past participle'." },
+            { id: 5, num: 84, src: "立命館大", q: "If we had had the correct parts, the problem with the machine ( ) fixed last week.", opts: ["could be", "has not been", "was", "would have been"], ans: 4, type: "mcq", jp: "If節が過去完了なので、主節は「助動詞の過去形＋have＋過去分詞」です。", en: "Main clause for past perfect conditional takes 'would have + past participle'." },
+            { id: 6, num: 85, src: "東海大", q: "If you [arrive] here a little later, you would have been caught in the shower. (誤りを正しなさい)", ans: "had arrived", type: "text", jp: "主節が would have been と仮定法過去完了なので、条件節も had arrived にします。", en: "Match the main clause's past perfect conditional by changing 'arrive' to 'had arrived'." },
+            { id: 7, num: 86, src: "立教大", q: "If you had followed my advice and saved money at that time, you ( ) much better off financially now.", opts: ["are", "have been", "must be", "would be"], ans: 4, type: "mcq", jp: "過去の条件が現在(now)に影響する混合仮定法。主節は仮定法過去の形をとります。", en: "Mixed conditional (past condition, present result indicated by 'now') uses 'would + base verb'." },
+            { id: 8, num: 87, src: "中央大", q: "If he ( ) rescued by the fire department at that time, he might not be alive today.", opts: ["is not", "had not been", "has not been", "were not"], ans: 2, type: "mcq", jp: "「あの時救出されていなかったら」という過去の事実に反する仮定法過去完了です。", en: "Past unreal condition requires past perfect 'had not been'." },
+            { id: 9, num: 88, src: "西南学院大", q: "もしだれかが私にそのように接してきたら、私は警察を呼びます。<br>(that / anyone / if / were / to / me / like / treat), I would call the police.", ans: "if anyone were to treat me like that", type: "text", jp: "万が一の未来を表す If S were to do ~ の構文です。", en: "Uses 'If S were to do' to express an unlikely future condition." },
+            { id: 10, num: 89, src: "日本大", q: "万が一、宝くじに当たったらどうしますか。<br>What (you should / you / win / if / would / do) the lottery?", ans: "would you do if you should win", type: "text", jp: "万が一を表す If S should do を用いた疑問文です。", en: "Uses 'If S should do' for improbable future conditions in an interrogative form." },
+            { id: 11, num: 90, src: "学習院大", q: "Jim wishes he ( ) better grades, but he isn't willing to study harder.", opts: ["got", "have got", "gets", "has"], ans: 1, type: "mcq", jp: "現在の実現不可能な願望を表す I wish + 仮定法過去 (過去形) です。", en: "I wish + past tense expresses an unreal present desire." },
+            { id: 12, num: 91, src: "岐阜大", q: "I wish John [stay] longer yesterday. I was hoping to have a chance to talk to him. (適切な形に)", ans: "had stayed", type: "text", jp: "過去(yesterday)の事実に反する願望なので、I wish + 過去完了形 にします。", en: "Expresses a regret about the past (yesterday), requiring the past perfect 'had stayed'." },
+            { id: 13, num: 92, src: "会津大", q: "Student 1: The teacher speaks too quickly.<br>Student 2: ( )", opts: ["She has one, too.", "Speak slowly.", "I have to make a speech.", "I wish she'd speak more slowly."], ans: 4, type: "mcq", jp: "「もっとゆっくり話してくれればいいのに」という願望表現が文脈に合います。", en: "Context implies a wish for behavior change, matching 'I wish she would...'." },
+            { id: 14, num: 93, src: "東邦大", q: "A: The meeting will start in twenty minutes. But our documents are not ready yet.<br>B: ( ) an hour, we could complete them.", opts: ["If only we had", "Were it not for", "If we have", "Having had"], ans: 1, type: "mcq", jp: "「あと1時間さえあれば」という強い願望・条件を表す If only S V です。", en: "If only + past tense indicates a strong hypothetical wish ('If only we had an hour')." },
+            { id: 15, num: 94, src: "創価大", q: "A: Would you mind if I smoked?<br>B: ( ) you didn't, if you don't mind.", opts: ["What if", "Suppose", "You would say", "I'd rather"], ans: 4, type: "mcq", jp: "I would rather + 仮定法過去 で「（人に）〜してほしいのですが」と控えめな要望を表します。", en: "'I would rather + S + past verb' is a polite way to ask someone not to do something." },
+            { id: 16, num: 95, src: "関西学院大", q: "I waited for July 7th as if it ( ) my birthday.", opts: ["were", "have been", "has been", "would be"], ans: 1, type: "mcq", jp: "「まるで〜であるかのように」を表す as if + 仮定法過去。be動詞は were を用います。", en: "'As if' takes the subjunctive past 'were' to describe an unreal current feeling." },
+            { id: 17, num: 96, src: "八戸工業大", q: "その建物に入ると、ジョーはまるでそこに住んでいたかのように感じた。<br>When Joe walked into the building, he felt ( ) there.", opts: ["that he would have lived", "as if he had lived", "as though he lives", "might well have lived"], ans: 2, type: "mcq", jp: "主節(felt)より前の事柄の仮定なので、as if + 過去完了形になります。", en: "The hypothetical action (living there) is prior to the main verb (felt), requiring past perfect." },
+            { id: 18, num: 97, src: "亜細亜大", q: "It's time David ( ) in the office.", opts: ["be", "being", "was", "to be"], ans: 3, type: "mcq", jp: "It is time + 仮定法過去「もう〜してもよい時間だ」。過去形の was を選びます。", en: "'It is time S + past tense' expresses that an action is delayed. 'was' is correct here." },
+            { id: 19, num: 98, src: "日本大", q: "It is high ( ) you left here to start a new life on your own.", opts: ["occasion", "case", "tide", "time"], ans: 4, type: "mcq", jp: "It is high time + 仮定法過去で「とっくに〜する時間だ」という重要表現です。", en: "Idiom 'It is high time S + past tense' means it's well past the time to do something." },
+            { id: 20, num: 99, src: "広島経済大", q: "If it were not ( ) water, no animal could live on Earth.", opts: ["for", "with", "about", "of"], ans: 1, type: "mcq", jp: "現在の事実に反する「もし〜がなければ」は If it were not for ~ です。", en: "Fixed subjunctive phrase: 'If it were not for ~' means 'without ~'." },
+            { id: 21, num: 100, src: "東京経済大", q: "彼女の支えがなければ、彼の計画は失敗に終わったであろう。<br>(been / it / for / not / if / had) her support, his plan would have ended in failure.", ans: "if it had not been for", type: "text", jp: "過去についての「〜がなかったら」は If it had not been for ~ を使います。", en: "Expresses 'without' in the past: 'If it had not been for ~'." },
+            { id: 22, num: 101, src: "関西学院大", q: "But ( ) the interruptions, the meeting would have finished earlier.", opts: ["for", "at", "of", "on"], ans: 1, type: "mcq", jp: "But for ~ は Without ~ と同じく「〜がなければ/なかったら」という仮定を表します。", en: "'But for ~' acts as a preposition meaning 'without ~' introducing a hypothetical condition." },
+            { id: 23, num: 102, src: "北里大", q: "( ) your help, we wouldn't be able to complete our plan.", opts: ["Instead of", "Without", "During", "Except"], ans: 2, type: "mcq", jp: "主節が仮定法(wouldn't be)なので、「〜がなければ」を意味する Without が入ります。", en: "The main clause uses a conditional modal, so 'Without' implies 'If it were not for'." },
+            { id: 24, num: 103, src: "東京理科大", q: "(a) If I were in your position...<br>(b) ( ) ( ) in your position...", ans: "Were I", type: "text", jp: "Ifを省略すると、主語と動詞が倒置され Were I になります。", en: "When 'if' is omitted in subjunctive clauses, subject-verb inversion occurs (Were I)." },
+            { id: 25, num: 104, src: "南山大", q: "( ) that Alex would take so long to get this project done, I wouldn't have given him the job.", opts: ["Was it known", "Did I know", "Have I known", "Had I known"], ans: 4, type: "mcq", jp: "If I had known... から If が省略されて倒置が起きた Had I known が正解です。", en: "Inversion from 'If I had known' omitting 'if' yields 'Had I known'." },
+            { id: 26, num: 105, src: "京都外国語短大", q: "( ) the sun to disappear, what would become of the Earth?", opts: ["Were", "Would", "If", "Should"], ans: 1, type: "mcq", jp: "If the sun were to... のIf省略形。倒置で Were the sun to ~ になります。", en: "Omission of 'if' from 'If the sun were to disappear' results in 'Were the sun to...'." },
+            { id: 27, num: 106, src: "鹿児島大", q: "( ) you need any more information, please call the information desk.", opts: ["Do", "Had", "Should", "Would"], ans: 3, type: "mcq", jp: "If you should need... のIf省略形。Should you need ~ と倒置になります。", en: "Inversion of 'If you should need...' dropping 'if' becomes 'Should you need...'." },
+            { id: 28, num: 107, src: "北里大", q: "( ) for the events of September 11th 2001, things would have taken a very different course.", opts: ["Without", "It were not", "Had it not been", "Except not"], ans: 3, type: "mcq", jp: "If it had not been for ~ のIfが省略された倒置形 Had it not been for ~ です。", en: "Inversion of 'If it had not been for...' becomes 'Had it not been for...'." },
+            { id: 29, num: 108, src: "埼玉医科大", q: "I would have studied Chinese ( ) I was going to be transferred to the branch office in Shanghai.", opts: ["I had known", "I knew", "did I know", "had I known"], ans: 4, type: "mcq", jp: "主節の後ろに続く条件節でもIfが省略されると倒置(had I known)が起きます。", en: "Inversion (had I known) occurs even when the conditional clause follows the main clause." },
+            { id: 30, num: 109, src: "明海大", q: "もう少し辛抱すれば、君はその問題を解くことができただろうに。<br>(a little / patience / more / with), you could have solved the problem.", ans: "with a little more patience", type: "text", jp: "副詞句 with ~ (〜があれば) が If節の代わりとして機能しています。", en: "The prepositional phrase 'with...' acts as a hidden conditional 'If you had had...'." },
+            { id: 31, num: 110, src: "工学院大", q: "I have an appointment tomorrow; ( ), I would accept your invitation.", opts: ["so that", "otherwise", "in case", "however"], ans: 2, type: "mcq", jp: "「そうでなければ(もし約束がなければ)」という仮定を表す副詞 otherwise が入ります。", en: "'Otherwise' functions as a conditional adverb meaning 'if things were different'." },
+            { id: 32, num: 111, src: "九州産業大", q: "注意深い販売員ならそんなもめごとは避けることができただろう。<br>A (have / could / avoided / careful / salesperson) the trouble.", ans: "careful salesperson could have avoided", type: "text", jp: "名詞(A careful salesperson)が「〜であれば」という仮定の条件を含んでいます。", en: "The noun phrase 'A careful salesperson' implicitly contains the conditional meaning." },
+            { id: 33, num: 112, src: "立命館大", q: "To hear him speak Spanish, you ( ) him a Spaniard.", opts: ["thought", "think", "will think", "would think"], ans: 4, type: "mcq", jp: "不定詞 To hear が「もし聞けば」という仮定を表し、帰結節は would think になります。", en: "The infinitive 'To hear' acts conditionally, so the main clause needs 'would think'." },
+            { id: 34, num: 113, src: "青山学院大", q: "It's a pity Tom didn't visit Jane when he had the chance. He would ( ) her before she left Japan.", opts: ["be seen to", "better have seen", "have wanted to see", "want to see"], ans: 3, type: "mcq", jp: "「会いたかっただろうに」と過去の事実への推測・願望を表す would have wanted to see です。", en: "Expresses a missed desire in the past: 'would have wanted to see'." }
+        ],
+
+        infinitive: [
+            { id: 1, num: 114, src: "立命館大", q: "My job ( ) and write about a wide variety of international dishes.", opts: ["had been traveling", "had traveled", "is to be traveled", "is to travel"], ans: 4, type: "mcq", jp: "補語となる名詞的用法の不定詞。and の後ろの(to) write と並列になっています。", en: "Subjective complement requires the infinitive 'is to travel', parallel with '(to) write'." },
+            { id: 2, num: 115, src: "専修大", q: "この薬の使い方に関してご質問があれば...<br>If you have any (use / questions / this medicine / how / about / to), please consult your doctor.", ans: "questions about how to use this medicine", type: "text", jp: "名詞questionsを修飾する前置詞about、その後ろに「疑問詞＋to不定詞」が続きます。", en: "'Questions about' followed by the interrogative infinitive 'how to use'." },
+            { id: 3, num: 116, src: "大阪経済大", q: "It is (a constant / important / temperature / to maintain) inside the laboratory.", ans: "important to maintain a constant temperature", type: "text", jp: "It is 構文で、真の主語となる to maintain ~ が後ろに続きます。", en: "Standard 'It is + adjective + to-infinitive' structure." },
+            { id: 4, num: 117, src: "法政大", q: "I (it / to / difficult / find / understand / comic books / English-language).", ans: "find it difficult to understand English-language comic books", type: "text", jp: "SVOC構文。形式目的語 it を置き、真の目的語(to understand...)を後ろに置きます。", en: "SVOC structure with 'it' as a preparatory object for the infinitive phrase." },
+            { id: 5, num: 118, src: "日本大", q: "Knives and forks were not always tools ( ) in Asia.", opts: ["eating for", "eating with", "to eat", "to eat with"], ans: 4, type: "mcq", jp: "名詞toolsを修飾する形容詞的用法。道具を「使って」食べるので前置詞withが必要です。", en: "Adjectival infinitive requiring the preposition 'with' (tools to eat with)." },
+            { id: 6, num: 119, src: "東京都市大", q: "New words are constantly being invented ( ) new objects and concepts.", opts: ["describe", "to describe", "a description of", "they describe"], ans: 2, type: "mcq", jp: "「〜を説明するために」という目的を表す不定詞の副詞的用法です。", en: "Adverbial infinitive of purpose: 'in order to describe'." },
+            { id: 7, num: 120, src: "桜美林大", q: "I was very relieved ( ) someone who could speak Japanese.", opts: ["find", "to find", "found", "to be found"], ans: 2, type: "mcq", jp: "感情の原因を表す副詞的用法「〜して安心した(relieved to find)」。", en: "Infinitive expressing the cause of an emotion: 'relieved to find'." },
+            { id: 8, num: 121, src: "長崎外国語大", q: "Tom was stupid ( ) such a rumor.", opts: ["believe", "to believe", "believing", "to belief"], ans: 2, type: "mcq", jp: "判断の根拠を表す副詞的用法。「〜するとは愚かだ(stupid to believe)」。", en: "Infinitive showing the basis of a judgment: 'stupid to believe'." },
+            { id: 9, num: 122, src: "鎌倉女子大", q: "It is kind [for] you to let me know what he thought of me. (誤りを正しなさい)", ans: "of", type: "text", jp: "人の性質(kind)を表す形容詞の場合、意味上の主語は for ではなく of を用います。", en: "Adjectives describing human character (kind) require 'of' for the semantic subject." },
+            { id: 10, num: 123, src: "東海大", q: "Though credit cards are ( ), many problems related to their use have been reported.", opts: ["easy as use", "easily to use", "easy to use", "easily as use"], ans: 3, type: "mcq", jp: "形容詞を修飾する副詞的用法「使うのが簡単な(easy to use)」。", en: "Adverbial infinitive modifying an adjective: 'easy to use'." },
+            { id: 11, num: 124, src: "成城大", q: "This river is deep and rapid, and dangerous to ( ).", opts: ["swim at", "be swum", "be swimming", "swim in"], ans: 4, type: "mcq", jp: "形容詞dangerousを修飾。川「の中で」泳ぐため前置詞inが必要です。", en: "Requires a preposition completing the action on the subject: 'swim in' (the river)." },
+            { id: 12, num: 125, src: "松山大", q: "I awoke one morning ( ) myself lying on the floor.", opts: ["finding", "to find", "found", "to have found"], ans: 2, type: "mcq", jp: "結果を表す副詞的用法。「目が覚めると、〜であることに気付いた(to find)」。", en: "Infinitive of result: awoke 'only to find' or awoke 'and found'." },
+            { id: 13, num: 126, src: "福山大", q: "He grew up ( ) a great scientist.", opts: ["be", "being", "to be", "was"], ans: 3, type: "mcq", jp: "結果の用法。「成長して〜になった(grew up to be)」。", en: "Infinitive of result: 'grew up to be'." },
+            { id: 14, num: 127, src: "弘前大", q: "My grandfather lived until he was ninety. (不定詞を使って書きかえ)", ans: "My grandfather lived to be ninety.", type: "text", jp: "結果の用法 lived to be ~ で「〜歳まで生きた」を表します。", en: "Rewritten using resultative infinitive: 'lived to be'." },
+            { id: 15, num: 128, src: "立教大", q: "Susan opened the box, ( ) to find it empty.", opts: ["but", "only", "next", "soon"], ans: 2, type: "mcq", jp: "「〜したが、結局…だった」という残念な結果を表す only to do です。", en: "'only to find' expresses a disappointing or unexpected result." },
+            { id: 16, num: 129, src: "拓殖大", q: "姉は僕に「私のコンピューターを使わないで」と言いました。<br>My sister (to / told / not / me / use) her computer.", ans: "told me not to use", type: "text", jp: "tell A to do の否定形 tell A not to do「Aに〜しないよう言う」です。", en: "Negative infinitive structure: 'tell someone not to do something'." },
+            { id: 17, num: 130, src: "文化女子大", q: "夕食に遅れるとは、いつもの彼らしくないことだ。<br>It (very / is / unusual / to / him / for) be late for dinner.", ans: "is very unusual for him to", type: "text", jp: "It is 形容詞 for A to do の構文です。", en: "Standard structure: 'It is + adjective + for [object] + to do'." },
+            { id: 18, num: 131, src: "成蹊大", q: "私たちは彼らのすばらしい演奏に感心しないわけにはいかなかった。<br>It was (not / almost / for / that / impossible / us) to be impressed... (1語不要)", ans: "almost impossible for us not", type: "text", jp: "It is impossible for A to do の否定形(not to be)。thatは不要です。", en: "Negative infinitive construction: 'for us not to be impressed'. Drop 'that'." },
+            { id: 19, num: 132, src: "神戸学院大", q: "彼が学業を続けられたのは、奨学金のおかげである。<br>The scholarship (continue / for / it / him / made / possible / to) his studies.", ans: "made it possible for him to continue", type: "text", jp: "make it possible for A to do (Aが〜するのを可能にする)の重要構文。", en: "SVOC structure with preparatory 'it': 'made it possible for him to continue'." },
+            { id: 20, num: 133, src: "就実大", q: "(a) It seems that he was sick.<br>(b) He seems to ( ) sick.", opts: ["be", "have been", "have", "have being"], ans: 2, type: "mcq", jp: "主節(現在)より前の事柄(過去)なので完了不定詞 to have been にします。", en: "Perfect infinitive 'to have been' indicates an action prior to the main verb." },
+            { id: 21, num: 134, src: "近畿大", q: "He is said ( ) that machine late in the twentieth century.", opts: ["that he invent", "that he was invented", "to have invented", "to invent"], ans: 3, type: "mcq", jp: "文末に過去を示す語句があり、主節より過去のことなので完了不定詞を用います。", en: "Refers to past action relative to 'is said', requiring the perfect infinitive." },
+            { id: 22, num: 135, src: "日本大", q: "He stopped smoking because his wife and children asked him ( ).", opts: ["for", "at", "to", "of"], ans: 3, type: "mcq", jp: "代不定詞。前に出た動詞の反復を避けるため to だけで終わります(ask him to [stop])。", en: "Pro-infinitive 'to' replaces the previously mentioned verb phrase to avoid repetition." },
+            { id: 23, num: 136, src: "北里大", q: "The boy opened the window, although his mother told him ( ).", opts: ["doesn't", "he does not", "not do it", "not to"], ans: 4, type: "mcq", jp: "否定の代不定詞。told him not to [open the window] の略です。", en: "Negative pro-infinitive 'not to' avoids repeating the action verb." },
+            { id: 24, num: 137, src: "川崎医療福祉大", q: "This dress is too expensive ( )", opts: ["for me to buy", "for me buying", "for me to buying", "that I can't buy it"], ans: 1, type: "mcq", jp: "「〜するには…すぎる」を表す too ~ to do 構文に意味上の主語 for me を入れます。", en: "'too [adjective] for [someone] to [verb]' structure." },
+            { id: 25, num: 138, src: "獨協大", q: "This table is (around / enough / for / large / sit / to / five people).", ans: "large enough for five people to sit around", type: "text", jp: "形容詞 enough for A to do「Aが〜するのに十分な」の語順です。", en: "Word order: '[adjective] + enough for [object] + to [verb]'." },
+            { id: 26, num: 139, src: "流通科学大", q: "Masami was kind ( ) to give her seat to an old lady on the train.", opts: ["off", "about", "enough", "to"], ans: 3, type: "mcq", jp: "「親切にも〜してくれた」を表す kind enough to do です。", en: "Idiomatic usage: 'kind enough to do something'." },
+            { id: 27, num: 140, src: "湘南工科大", q: "The wind was not ( ) to prevent us from yachting.", opts: ["as strong", "as strong as", "so strong", "so strong as"], ans: 4, type: "mcq", jp: "「〜するほど…」を表す so 形容詞 as to do。ここでは否定形になります。", en: "Structure 'so [adjective] as to [verb]', meaning 'so strong that it would prevent...'." },
+            { id: 28, num: 141, src: "新潟医療福祉大", q: "The train was made small so as to climb the steep hills.", opts: ["as the result", "as well as", "effective to", "in order to"], ans: 4, type: "mcq", jp: "目的を表す so as to = in order to (〜するために) です。", en: "'so as to' is synonymous with 'in order to' for expressing purpose." },
+            { id: 29, num: 142, src: "奥羽大", q: "We talked quietly ( ) disturb him in his study.", opts: ["not so as to", "so as not to", "so not as to", "so as to no"], ans: 2, type: "mcq", jp: "目的の否定形「〜しないように」。so as not to + 原形 が正しい語順です。", en: "Negative purpose requires the order 'so as not to [verb]'." },
+            { id: 30, num: 143, src: "女子栄養大", q: "We were having tea in the kitchen, when we heard something ( ).", opts: ["explode", "to explode", "explosion", "exploit"], ans: 1, type: "mcq", jp: "知覚動詞 hear + O + 原形不定詞 (Oが〜するのを聞く)。", en: "Verb of perception 'hear' takes a bare infinitive (explode)." },
+            { id: 31, num: 144, src: "日本大", q: "I was made ( ) four hours before I was examined by a doctor.", opts: ["to wait", "wait", "waited", "waits"], ans: 1, type: "mcq", jp: "使役動詞 make が受動態になると、原形不定詞は to不定詞 に戻ります。", en: "Causative 'make' in the passive voice requires the full infinitive ('to wait')." },
+            { id: 32, num: 145, src: "東海大", q: "そのドアを開けるには、このボタンを押しさえすればよい。<br>(all / to / push / have / do is / you) this button to open the door.", ans: "All you have to do is push", type: "text", jp: "「あなたは〜しさえすればよい」All you have to do is (to) 原形 の構文です。", en: "Idiom 'All you have to do is [bare infinitive]'." },
+            { id: 33, num: 146, src: "福井工業大", q: "その会議は明後日開かれる予定です。<br>The meeting (the day / is / be / to / after / held) tomorrow.", ans: "is to be held the day after", type: "text", jp: "予定を表す be to 不定詞。受動態なので is to be held になります。", en: "'be to' infinitive expresses scheduled future events. Passive voice required." },
+            { id: 34, num: 147, src: "九州国際大", q: "Not a star ( ) seen in the sky.", opts: ["was to be", "being", "has", "had"], ans: 1, type: "mcq", jp: "可能(〜できる)を表す be to 不定詞。主に否定文で受動態(to be seen)と伴います。", en: "'be to' infinitive can express possibility in negative sentences ('was to be seen')." },
+            { id: 35, num: 148, src: "日本大", q: "This form is ( ) in black ink. You are not allowed to use a pencil.", opts: ["filling", "filling out", "to fill", "to be filled out"], ans: 4, type: "mcq", jp: "義務(〜すべきである)を表す be to 不定詞。用紙は「記入される」ので受動態。", en: "'be to' expressing obligation. The form receives the action, so passive is needed." },
+            { id: 36, num: 149, src: "東京理科大", q: "If you ( ) to win the tournament, you must train more.", opts: ["do", "are", "were for", "don't have"], ans: 2, type: "mcq", jp: "意図(〜するつもりなら)を表す be to 不定詞。If節で用いられます。", en: "'be to' expressing intention or desire within an If-clause." },
+            { id: 37, num: 150, src: "愛知工業大", q: "彼女は、英語は言うまでもなく、中国語も話すことができる。<br>She can speak Chinese, (say / of / nothing / to / English).", ans: "to say nothing of English", type: "text", jp: "「〜は言うまでもなく」を表す独立不定詞の慣用表現 to say nothing of ~ です。", en: "Idiomatic absolute infinitive phrase: 'to say nothing of'." },
+            { id: 38, num: 151, src: "名城大", q: "(a) It goes without saying that honesty is the best policy.<br>(b) ( ) to say, honesty is the best policy.", opts: ["Needless", "Not", "Without", "Empty"], ans: 1, type: "mcq", jp: "「言うまでもなく」＝ Needless to say です。", en: "Synonymous idiom for 'it goes without saying': 'Needless to say'." },
+            { id: 39, num: 152, src: "立正大", q: "I usually sleep soundly, but ( ), I woke up twice last night.", opts: ["to say nothing of", "to make matters worse", "strange to say", "to begin with"], ans: 3, type: "mcq", jp: "「不思議なことに」を表す独立不定詞 strange to say が文脈に合います。", en: "Matches the context of an unusual event: 'strange to say'." },
+            { id: 40, num: 153, src: "昭和大", q: "実を言うと、私はパーティーに行くのは好きではない。<br>(tell / truth / to / the), I don't like attending parties.", ans: "To tell the truth", type: "text", jp: "「実を言うと」の慣用表現 to tell the truth です。", en: "Conversational absolute infinitive idiom: 'To tell the truth'." },
+            { id: 41, num: 154, src: "摂南大", q: "The package arrived late and, to ( ) matters worse, it wasn't what we had ordered.", opts: ["get", "do", "make", "be"], ans: 3, type: "mcq", jp: "「さらに悪いことには」を表す to make matters worse です。", en: "Idiom for compounding a bad situation: 'to make matters worse'." }
+        ],
+
+        gerund: [
+            { id: 1, num: 155, src: "東海大", q: "In this country, ( ) your nose in public is impolite.", opts: ["blew", "blow", "blown", "blowing"], ans: 4, type: "mcq", jp: "主語になる動名詞「〜すること(blowing)」。", en: "Gerund functioning as the subject of the sentence ('blowing')." },
+            { id: 2, num: 156, src: "学習院大", q: "My teacher advised me to review past questions before ( ) the test.", opts: ["to take", "taking", "taken", "I will take"], ans: 2, type: "mcq", jp: "前置詞 before の目的語となるため動名詞 taking を用います。", en: "Preposition 'before' requires a gerund object." },
+            { id: 3, num: 157, src: "立命館大", q: "驚いたことに、だれも彼らが優勝するとは思わなかった。<br>Surprisingly, (anticipated / first / no one / prize / their / winning).", ans: "no one anticipated their winning first prize", type: "text", jp: "anticipate -ing (〜を予想する)。意味上の主語 their を動名詞の前に置きます。", en: "'anticipate' takes a gerund. 'their' serves as the semantic subject." },
+            { id: 4, num: 158, src: "大阪医科薬科大", q: "He dislikes ( ) a 'herbivore' or 'grass-eating boy.'", opts: ["to be calling", "to being called", "be called", "being called"], ans: 4, type: "mcq", jp: "dislike は動名詞を目的語にとります。「呼ばれること」なので受動態 being called。", en: "'dislike' takes a gerund. The passive voice ('being called') is required." },
+            { id: 5, num: 159, src: "中央学院大", q: "He regrets ( ) left school before graduation.", opts: ["having", "being", "to have", "for having"], ans: 1, type: "mcq", jp: "主節(現在)より過去のこと(退学したこと)を悔やむので、完了動名詞 having left にします。", en: "Action prior to the main verb needs the perfect gerund ('having left')." },
+            { id: 6, num: 160, src: "桜美林大", q: "I'm sorry for ( ) your e-mail sooner.", opts: ["not to answer", "not to have answer", "not having answered", "no answering"], ans: 3, type: "mcq", jp: "動名詞の否定(notを前置)＋完了動名詞(having + p.p.)の組み合わせです。", en: "Negative perfect gerund is formed as 'not having [past participle]'." },
+            { id: 7, num: 161, src: "愛媛大", q: "It is useless to try to persuade him...<br>It is ( ) ( ) trying to persuade him...", ans: "no use", type: "text", jp: "「〜しても無駄だ」 It is useless to do = It is no use -ing です。", en: "Idiomatic equivalence: 'It is useless to do' = 'It is no use doing'." },
+            { id: 8, num: 162, src: "青山学院大", q: "There's no use ( ) angry about that.", opts: ["get", "getting", "to get", "to be gotten"], ans: 2, type: "mcq", jp: "There is no use -ing も「〜しても無駄だ」という慣用表現です。", en: "'There is no use doing' is another variation of the idiom." },
+            { id: 9, num: 163, src: "防衛大学校", q: "Because we are not allowed to use... (point / is / taking / in / there / no) an electronic dictionary with you.", ans: "there is no point in taking", type: "text", jp: "「〜しても意味がない」 There is no point in -ing 構文。", en: "Idiom meaning it's meaningless to do something: 'There is no point in doing'." },
+            { id: 10, num: 164, src: "東海大", q: "We look forward ( ) your prompt reply.", opts: ["in receiving", "to receiving", "to have received", "to receive"], ans: 2, type: "mcq", jp: "look forward to -ing (〜を楽しみに待つ)。このtoは前置詞なので動名詞が続きます。", en: "'to' is a preposition here, requiring a gerund ('receiving')." },
+            { id: 11, num: 165, src: "中央大", q: "These days, a lot of Japanese students ( ) speeches in public.", opts: ["are used to give", "used to giving", "used to give", "are used to giving"], ans: 4, type: "mcq", jp: "be used to -ing (〜することに慣れている) を選びます。", en: "Idiom meaning accustomed to: 'be used to doing'." },
+            { id: 12, num: 166, src: "工学院大", q: "Mr. Brown is not yet accustomed to ( ) the Japanese way of doing business.", opts: ["follow", "followed", "following", "have followed"], ans: 3, type: "mcq", jp: "be accustomed to -ing も be used to -ing と同様「〜に慣れている」という意味です。", en: "'be accustomed to' functions similarly to 'be used to', taking a gerund." },
+            { id: 13, num: 167, src: "関西医療大", q: "I really object to ( ) treated like this.", opts: ["have", "be", "being", "have been"], ans: 3, type: "mcq", jp: "object to -ing (〜することに反対する)。受動態なので being treated となります。", en: "'object to' takes a gerund. Requires passive 'being treated'." },
+            { id: 14, num: 168, src: "成蹊大", q: "海外留学というと、どんなことが一番心配になりますか。<br>What is your biggest concern (comes / when / studying / it / talks / to) abroad? (1語不要)", ans: "when it comes to studying", type: "text", jp: "「〜ということになれば」 when it comes to -ing。talksは不要です。", en: "Idiom introducing a topic: 'when it comes to doing'." },
+            { id: 15, num: 169, src: "拓殖大", q: "What do you say ( ) a walk in the park?", opts: ["taking", "to take", "to taking", "of taking"], ans: 3, type: "mcq", jp: "What do you say to -ing? (〜するのはどうですか)という提案表現です。", en: "Conversational idiom for suggesting an activity: 'What do you say to doing?'" },
+            { id: 16, num: 170, src: "龍谷大", q: "1人でその企画を完成させるのは大変でしょう。<br>(a lot of / by / completing / difficulty / have / that project / you'll) yourself.", ans: "you'll have a lot of difficulty completing that project by", type: "text", jp: "have difficulty (in) -ing「〜するのに苦労する」の構文です。", en: "Idiomatic structure: 'have difficulty [in] doing something'." },
+            { id: 17, num: 171, src: "名古屋学院大", q: "I (remembering / had / trouble / no) their names and faces.", ans: "had no trouble remembering", type: "text", jp: "have trouble -ing の否定形。in が省略された形です。", en: "Similar to have difficulty: 'have trouble doing something'." },
+            { id: 18, num: 172, src: "青山学院大", q: "She is busy ( ) her lessons.", opts: ["prepare", "preparing", "to prepare", "to be prepared"], ans: 2, type: "mcq", jp: "be busy (in) -ing「〜するのに忙しい」。in は通例省略されます。", en: "Idiom meaning occupied with a task: 'be busy doing'." },
+            { id: 19, num: 173, src: "中央大", q: "Many business people spend much of their time ( ) meetings in different countries.", opts: ["attending", "to attend", "attended", "have attended"], ans: 1, type: "mcq", jp: "spend 時間/お金 (in) -ing「〜するのに時間/お金を費やす」。", en: "Verb pattern: 'spend [time/money] doing something'." },
+            { id: 20, num: 174, src: "中央大", q: "There is no ( ) when she will come to this town again.", opts: ["telling", "tell", "told", "tells"], ans: 1, type: "mcq", jp: "There is no -ing「〜することはできない」。It is impossible to do と同義です。", en: "Idiom expressing impossibility: 'There is no doing'." },
+            { id: 21, num: 175, src: "九州国際大", q: "健康が富に勝ることは言うまでもない。<br>It (saying / is / health / that / without / goes) above wealth.", ans: "goes without saying that health is", type: "text", jp: "It goes without saying that SV「〜は言うまでもない」。", en: "Common proverb starter: 'It goes without saying that...'." },
+            { id: 22, num: 176, src: "東洋大", q: "Nancy was so happy that she felt like [to sing] a song. (誤りを正しなさい)", ans: "singing", type: "text", jp: "feel like -ing で「〜したい気がする」を表します。", en: "'feel like' takes a gerund to express desire: 'feel like singing'." },
+            { id: 23, num: 177, src: "高崎経済大", q: "As soon as I arrived at the station...<br>( ) at the station, I saw my friend.", opts: ["In arriving", "On arriving", "With arriving", "Without arriving"], ans: 2, type: "mcq", jp: "on -ing = As soon as S V「〜するとすぐに」の書き換えです。", en: "Prepositional idiom: 'on doing' means 'as soon as'." },
+            { id: 24, num: 178, src: "山梨学院大", q: "新しい車を購入するときには、注意すべきです。<br>You should (careful / buying / be / new / in) cars.", ans: "be careful in buying new", type: "text", jp: "in -ing = when S V「〜するときには」。be careful in -ing となります。", en: "'in doing' translates to 'when doing' or 'while doing'." }
+        ]
+    };
+
+    function renderSection(sectionId, dataArray) {
+        const container = document.getElementById(sectionId);
+        let html = `<form id="${sectionId}-form">`;
+        
+        dataArray.forEach((item, index) => {
+            let qHtml = '';
+            let ansLabel = '';
+            
+            // Differentiate rendering based on question type
+            if (item.type === 'mcq') {
+                let optsHtml = `<option value="">-- 解答を選択してください --</option>`;
+                item.opts.forEach((opt, i) => {
+                    optsHtml += `<option value="${i+1}">①②③④⑤⑥`.charAt(i) + ` ${opt}</option>`;
+                });
+                qHtml = `<select class="quiz-select" data-ans="${item.ans}">${optsHtml}</select>`;
+                ansLabel = `①②③④⑤⑥`.charAt(item.ans-1) + ' ' + item.opts[item.ans-1];
+            } else {
+                qHtml = `<input type="text" class="quiz-input" data-ans="${item.ans}" placeholder="解答を入力してください (Type your answer...)" autocomplete="off">`;
+                ansLabel = item.ans;
+            }
+
+            html += `
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <span class="problem-num">Q${index+1} (No. ${item.num})</span>
+                        <span class="source-tag">${item.src}</span>
+                    </div>
+                    <div class="question-text">${item.q}</div>
+                    
+                    <div class="quiz-only" style="display:none;">
+                        ${qHtml}
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="study-only">
+                        <div class="answer-box">
+                            <span class="answer-label">正解 (Correct Answer): ${ansLabel}</span>
+                        </div>
+                        <div class="explanation">
+                            <div class="lang-section">
+                                <div class="lang-title">日本語解説</div>
+                                ${item.jp}
+                            </div>
+                            <div class="lang-section">
+                                <div class="lang-title">English Explanation</div>
+                                ${item.en}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</form>`;
+        container.innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderSection('subjunctive-section', db.subjunctive);
+        renderSection('infinitive-section', db.infinitive);
+        renderSection('gerund-section', db.gerund);
+    });
+
+    let currentCategory = 'subjunctive';
+    let currentMode = 'study';
+
+    function switchCategory(cat) {
+        currentCategory = cat;
+        
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(cat + '-section').classList.add('active');
+
+        resetQuiz();
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        const studyEls = document.querySelectorAll('.study-only');
+        const quizEls = document.querySelectorAll('.quiz-only');
+        const quizControls = document.getElementById('quizControls');
+
+        if (mode === 'quiz') {
+            studyEls.forEach(el => el.style.display = 'none');
+            quizEls.forEach(el => el.style.display = 'block');
+            quizControls.style.display = 'block';
+        } else {
+            studyEls.forEach(el => el.style.display = 'block');
+            quizEls.forEach(el => el.style.display = 'none');
+            quizControls.style.display = 'none';
+            document.getElementById('scoreBanner').style.display = 'none';
+        }
+    }
+
+    function normalizeStr(str) {
+        // Strip spaces, punctuation, lowercase for robust grading of typed answers
+        return String(str).toLowerCase().replace(/[^a-z0-9]/gi, '');
+    }
+
+    function gradeQuiz() {
+        const activeSection = document.getElementById(currentCategory + '-section');
+        const cards = activeSection.querySelectorAll('.problem-card');
+        let score = 0;
+        let total = cards.length;
+
+        cards.forEach(card => {
+            const el = card.querySelector('.quiz-select') || card.querySelector('.quiz-input');
+            const feedback = card.querySelector('.quiz-feedback');
+            const correctVal = el.getAttribute('data-ans');
+            const userVal = el.value.trim();
+            
+            let isCorrect = false;
+            
+            if (el.classList.contains('quiz-select')) {
+                isCorrect = (userVal === correctVal);
+            } else {
+                isCorrect = (normalizeStr(userVal) === normalizeStr(correctVal));
+            }
+
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = '<div class="quiz-result correct">✓ 正解！ Excellent!</div>';
+            } else {
+                let displayAns = correctVal;
+                // For MCQs, fetch the actual option text if needed, but simple number works too.
+                if (el.classList.contains('quiz-select')) {
+                   displayAns = `選択肢 ${correctVal}`;
+                }
+                feedback.innerHTML = `<div class="quiz-result incorrect">✕ 不正解 (Incorrect) — 正解: ${displayAns}</div>`;
+            }
+        });
+
+        const scoreBanner = document.getElementById('scoreBanner');
+        scoreBanner.style.display = 'block';
+        scoreBanner.innerHTML = `スコア: ${score} / ${total} (${Math.round((score/total)*100)}%)`;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+        const activeSection = document.getElementById(currentCategory + '-section');
+        activeSection.querySelectorAll('.quiz-select').forEach(el => el.value = "");
+        activeSection.querySelectorAll('.quiz-input').forEach(el => el.value = "");
+        activeSection.querySelectorAll('.quiz-feedback').forEach(fb => fb.innerHTML = "");
+        document.getElementById('scoreBanner').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
